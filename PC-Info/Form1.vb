@@ -198,4 +198,5 @@ Public Class frmPCinfo
         rtbLog.AppendText(strMessage & vbNewLine)
     End Sub
 
+
 End Class

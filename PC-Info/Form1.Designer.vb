@@ -44,7 +44,6 @@ Partial Class frmPCinfo
         Me.txtHostnameOrIP.Name = "txtHostnameOrIP"
         Me.txtHostnameOrIP.Size = New System.Drawing.Size(152, 20)
         Me.txtHostnameOrIP.TabIndex = 0
-        Me.txtHostnameOrIP.Text = "lts486x"
         '
         'lblHost
         '
