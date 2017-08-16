@@ -113,30 +113,36 @@ Public Class frmPCinfo
     End Sub
 
     Private Sub Win32_NetworkAdapterConfiguration(ByVal strHostname As String)
-        Dim objWMIService As Object = GetObject("winmgmts:\\" & strHostname & "\root\cimv2")
-        Dim colItems = objWMIService.ExecQuery("Select * from Win32_NetworkAdapterConfiguration Where IPEnabled=TRUE")
+        Try
 
-        Dim strDHCPenabled As String
-        Dim strDHCPServer As String
-        Dim strIPAddress As String
-        Dim strMacAddress As String
+            Dim objWMIService As Object = GetObject("winmgmts:\\" & strHostname & "\root\cimv2")
+            Dim colItems = objWMIService.ExecQuery("Select * from Win32_NetworkAdapterConfiguration Where IPEnabled=TRUE")
 
-        For Each objItem In colItems
-            strDHCPenabled = " | DHCP enabled: " & objItem.DHCPEnabled
-            strDHCPServer = " | DHCP server: " & objItem.DHCPServer.ToString
-            If objItem.DHCPServer.ToString.Trim = String.Empty Then strDHCPServer = " | DHCP server: n/a"
+            Dim strDHCPenabled As String
+            Dim strDHCPServer As String
+            Dim strIPAddress As String
+            Dim strMacAddress As String
 
-            If objItem.IPAddress.Length >= 1 Then
-                For i = LBound(objItem.IPAddress) To UBound(objItem.IPAddress)
-                    strIPAddress = "IP: " & objItem.IPAddress(i)
-                    strMacAddress = " | MAC: " & objItem.MACAddress(i)
-                    Log(strIPAddress.ToString.PadRight(29) &
-                        strMacAddress.ToString.PadRight(19) &
-                        strDHCPenabled.ToString.PadRight(22) &
-                        strDHCPServer)
-                Next
-            End If
-        Next
+            For Each objItem In colItems
+                strDHCPenabled = " | DHCP enabled: " & objItem.DHCPEnabled
+                strDHCPServer = " | DHCP server: " & objItem.DHCPServer.ToString
+                If objItem.DHCPServer.ToString.Trim = String.Empty Then strDHCPServer = " | DHCP server: n/a"
+
+                If objItem.IPAddress.Length >= 1 Then
+                    For i = LBound(objItem.IPAddress) To UBound(objItem.IPAddress)
+                        strIPAddress = "IP: " & objItem.IPAddress(i)
+                        strMacAddress = " | MAC: " & objItem.MACAddress(i)
+                        Log(strIPAddress.ToString.PadRight(29) &
+                            strMacAddress.ToString.PadRight(19) &
+                            strDHCPenabled.ToString.PadRight(22) &
+                            strDHCPServer)
+                    Next
+                End If
+            Next
+
+        Catch ex As Exception
+            Log("Error in Private Sub Win32_NetworkAdapterConfiguration.  Error: " & ex.Message)
+        End Try
     End Sub
 
     ' Reformat WMI Date/Time to normal Date/Time (not used in this app)
